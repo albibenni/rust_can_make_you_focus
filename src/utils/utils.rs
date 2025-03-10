@@ -4,6 +4,9 @@ const NETFLIX: &str = "netflix";
 const YOUTUBE_WEBSITE: &str = "www.youtube.com";
 const NETFLIX_WEBSITE: &str = "www.netflix.com";
 const X_WEBSITE: &str = "www.x.com";
+const ALL: &str = "all";
+const CODING: &str = "coding";
+const STUDING: &str = "study";
 
 /// Matches command line arguments and converts them to corresponding website URLs.
 ///
@@ -14,8 +17,16 @@ const X_WEBSITE: &str = "www.x.com";
 ///
 /// A vector of strings containing the website URLs for the matched platforms.
 pub fn match_args(arguments: &Vec<String>) -> Vec<String> {
+    let supported_preset: Vec<&str> = vec![ALL, STUDING, CODING];
     let mut vec_arg_websites: Vec<String> = Vec::new();
+    // preset
+    // - all
+    // - coding
+
     for arg in arguments {
+        if supported_preset.contains(&arg.to_lowercase().as_str()) {
+            add_website_based_on_preset(&arg);
+        }
         match arg.to_lowercase().as_str() {
             YOUTUBE => vec_arg_websites.push(YOUTUBE_WEBSITE.to_string()),
             NETFLIX => vec_arg_websites.push(NETFLIX_WEBSITE.to_string()),
@@ -24,6 +35,30 @@ pub fn match_args(arguments: &Vec<String>) -> Vec<String> {
         }
     }
     return vec_arg_websites;
+}
+
+fn add_website_based_on_preset(preset: &String) -> Vec<&str> {
+    let mut webs: Vec<&str> = Vec::new();
+    match preset.to_lowercase().as_str() {
+        ALL => {
+            webs.push(YOUTUBE_WEBSITE);
+            webs.push(X_WEBSITE);
+            webs.push(NETFLIX_WEBSITE);
+        }
+        CODING => {
+            webs.push(YOUTUBE_WEBSITE);
+            webs.push(X_WEBSITE);
+        }
+        STUDING => {
+            webs.push(YOUTUBE_WEBSITE);
+            webs.push(X_WEBSITE);
+            webs.push(NETFLIX_WEBSITE);
+        }
+        _ => {
+            panic!("preset not defined, consider adding a new preset");
+        }
+    }
+    return webs;
 }
 
 #[cfg(test)]
