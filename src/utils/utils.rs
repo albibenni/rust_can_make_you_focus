@@ -6,7 +6,7 @@ const NETFLIX_WEBSITE: &str = "www.netflix.com";
 const X_WEBSITE: &str = "www.x.com";
 const ALL: &str = "all";
 const CODING: &str = "coding";
-const STUDING: &str = "study";
+const STUDYING: &str = "studying";
 
 /// Matches command line arguments and converts them to corresponding website URLs.
 ///
@@ -16,27 +16,44 @@ const STUDING: &str = "study";
 /// # Returns
 ///
 /// A vector of strings containing the website URLs for the matched platforms.
-pub fn match_args(arguments: &Vec<String>) -> Vec<String> {
-    let supported_preset: Vec<&str> = vec![ALL, STUDING, CODING];
-    let mut vec_arg_websites: Vec<String> = Vec::new();
+pub fn match_args(arguments: &Vec<String>) -> Vec<&str> {
+    let supported_preset: Vec<&str> = vec![ALL, STUDYING, CODING];
+    let mut vec_arg_websites: Vec<&str> = Vec::new();
     // preset
     // - all
     // - coding
 
     for arg in arguments {
         if supported_preset.contains(&arg.to_lowercase().as_str()) {
-            add_website_based_on_preset(&arg);
+            vec_arg_websites = add_website_based_on_preset(&arg);
         }
         match arg.to_lowercase().as_str() {
-            YOUTUBE => vec_arg_websites.push(YOUTUBE_WEBSITE.to_string()),
-            NETFLIX => vec_arg_websites.push(NETFLIX_WEBSITE.to_string()),
-            X => vec_arg_websites.push(X_WEBSITE.to_string()),
+            YOUTUBE => vec_arg_websites.push(YOUTUBE_WEBSITE),
+            NETFLIX => vec_arg_websites.push(NETFLIX_WEBSITE),
+            X => vec_arg_websites.push(X_WEBSITE),
             _ => continue,
         }
     }
     return vec_arg_websites;
 }
 
+/// Generates a list of website URLs based on a specified preset category.
+///
+/// This function takes a preset category name and returns a vector of website URLs
+/// that correspond to that category. Each preset represents a different use case
+/// or focus area with relevant websites.
+///
+/// # Arguments
+///
+/// * `preset` - A string representing the preset category to use
+///
+/// # Returns
+///
+/// A vector of string slices containing website URLs for the specified preset
+///
+/// # Panics
+///
+/// Panics if the provided preset is not recognized
 fn add_website_based_on_preset(preset: &String) -> Vec<&str> {
     let mut webs: Vec<&str> = Vec::new();
     match preset.to_lowercase().as_str() {
@@ -49,7 +66,7 @@ fn add_website_based_on_preset(preset: &String) -> Vec<&str> {
             webs.push(YOUTUBE_WEBSITE);
             webs.push(X_WEBSITE);
         }
-        STUDING => {
+        STUDYING => {
             webs.push(YOUTUBE_WEBSITE);
             webs.push(X_WEBSITE);
             webs.push(NETFLIX_WEBSITE);
@@ -112,17 +129,58 @@ mod tests {
         let result = match_args(&args);
         assert_eq!(result.len(), 3, "Should return two website URLs");
         assert!(
-            result.contains(&NETFLIX_WEBSITE.to_string()),
+            result.contains(&NETFLIX_WEBSITE),
             "Should contain Netflix website URL"
         );
         assert!(
-            result.contains(&YOUTUBE_WEBSITE.to_string()),
+            result.contains(&YOUTUBE_WEBSITE),
             "Should contain YouTube website URL"
         );
+        assert!(result.contains(&X_WEBSITE), "Should contain X website URL");
+    }
+    #[test]
+    fn test_match_args_with_preset() {
+        let args = vec![ALL.to_string()];
+        let result = match_args(&args);
+        println!("AAAAAA {:?}", result);
+        assert_eq!(result.len(), 3, "Should return three website URLs");
         assert!(
-            result.contains(&X_WEBSITE.to_string()),
-            "Should contain X website URL"
+            result.contains(&NETFLIX_WEBSITE),
+            "Should contain Netflix website URL"
         );
+        assert!(
+            result.contains(&YOUTUBE_WEBSITE),
+            "Should contain YouTube website URL"
+        );
+        assert!(result.contains(&X_WEBSITE), "Should contain X website URL");
+    }
+
+    #[test]
+    fn test_match_args_with_preset_study() {
+        let args = vec![STUDYING.to_string()];
+        let result = match_args(&args);
+        assert_eq!(result.len(), 3, "Should return three website URLs");
+        assert!(
+            result.contains(&NETFLIX_WEBSITE),
+            "Should contain Netflix website URL"
+        );
+        assert!(
+            result.contains(&YOUTUBE_WEBSITE),
+            "Should contain YouTube website URL"
+        );
+        assert!(result.contains(&X_WEBSITE), "Should contain X website URL");
+    }
+
+    #[test]
+    fn test_match_args_with_preset_coding() {
+        let args = vec![CODING.to_string()];
+        let result = match_args(&args);
+        assert_eq!(result.len(), 2, "Should return three website URLs");
+        assert!(
+            result.contains(&YOUTUBE_WEBSITE),
+            "Should contain YouTube website URL"
+        );
+        assert!(result.contains(&X_WEBSITE), "Should contain X website URL");
     }
 
     #[test]
@@ -134,5 +192,89 @@ mod tests {
             0,
             "Should return empty vector for unknown platforms"
         );
+    }
+
+    #[test]
+    fn test_add_website_based_on_preset_all() {
+        let preset = ALL.to_string();
+        let websites = add_website_based_on_preset(&preset);
+
+        assert_eq!(websites.len(), 3, "ALL preset should return 3 websites");
+        assert!(
+            websites.contains(&YOUTUBE_WEBSITE),
+            "ALL preset should contain YouTube"
+        );
+        assert!(websites.contains(&X_WEBSITE), "ALL preset should contain X");
+        assert!(
+            websites.contains(&NETFLIX_WEBSITE),
+            "ALL preset should contain Netflix"
+        );
+    }
+
+    #[test]
+    fn test_add_website_based_on_preset_coding() {
+        let preset = CODING.to_string();
+        let websites = add_website_based_on_preset(&preset);
+
+        assert_eq!(websites.len(), 2, "CODING preset should return 2 websites");
+        assert!(
+            websites.contains(&YOUTUBE_WEBSITE),
+            "CODING preset should contain YouTube"
+        );
+        assert!(
+            websites.contains(&X_WEBSITE),
+            "CODING preset should contain X"
+        );
+        assert!(
+            !websites.contains(&NETFLIX_WEBSITE),
+            "CODING preset should not contain Netflix"
+        );
+    }
+
+    #[test]
+    fn test_add_website_based_on_preset_studying() {
+        let preset = STUDYING.to_string();
+        let websites = add_website_based_on_preset(&preset);
+
+        assert_eq!(websites.len(), 3, "STUDING preset should return 3 websites");
+        assert!(
+            websites.contains(&YOUTUBE_WEBSITE),
+            "STUDING preset should contain YouTube"
+        );
+        assert!(
+            websites.contains(&X_WEBSITE),
+            "STUDING preset should contain X"
+        );
+        assert!(
+            websites.contains(&NETFLIX_WEBSITE),
+            "STUDING preset should contain Netflix"
+        );
+    }
+
+    #[test]
+    fn test_add_website_based_on_preset_case_insensitive() {
+        let preset = "CoDiNg".to_string();
+        let websites = add_website_based_on_preset(&preset);
+
+        assert_eq!(
+            websites.len(),
+            2,
+            "Case insensitive CODING preset should return 2 websites"
+        );
+        assert!(
+            websites.contains(&YOUTUBE_WEBSITE),
+            "Case insensitive CODING preset should contain YouTube"
+        );
+        assert!(
+            websites.contains(&X_WEBSITE),
+            "Case insensitive CODING preset should contain X"
+        );
+    }
+
+    #[test]
+    #[should_panic(expected = "preset not defined")]
+    fn test_add_website_based_on_preset_invalid() {
+        let preset = "INVALID_PRESET".to_string();
+        add_website_based_on_preset(&preset); // Should panic
     }
 }

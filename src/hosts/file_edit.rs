@@ -14,7 +14,7 @@ const LOCALHOST: &str = "127.0.0.1";
 /// # Returns
 ///
 /// A `Result` indicating success or an I/O error if file operations fail
-pub fn parse_hosts_file(args: &Vec<String>) -> Result<(), std::io::Error> {
+pub fn parse_hosts_file(args: &Vec<&str>) -> Result<(), std::io::Error> {
     let mut file: String = std::fs::read_to_string(FILE_PATH).expect("Failed to read file");
     for arg in args {
         file.push_str(LOCALHOST);
