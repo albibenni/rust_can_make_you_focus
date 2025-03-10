@@ -1,6 +1,19 @@
 const FILE_PATH: &str = "/etc/hosts";
 const LOCALHOST: &str = "127.0.0.1";
 
+/// Modifies the system hosts file to add new host entries.
+///
+/// This function reads the current content of the system hosts file, then appends
+/// new entries mapping the localhost IP address (127.0.0.1) to each domain name
+/// provided in the arguments.
+///
+/// # Arguments
+///
+/// * `args` - A vector of strings representing domain names to add to the hosts file
+///
+/// # Returns
+///
+/// A `Result` indicating success or an I/O error if file operations fail
 pub fn parse_hosts_file(args: &Vec<String>) -> Result<(), std::io::Error> {
     let mut file: String = std::fs::read_to_string(FILE_PATH).expect("Failed to read file");
     for arg in args {
