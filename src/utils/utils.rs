@@ -1,6 +1,8 @@
 const YOUTUBE: &str = "youtube";
 const X: &str = "x";
+const NETFLIX: &str = "netflix";
 const YOUTUBE_WEBSITE: &str = "www.youtube.com";
+const NETFLIX_WEBSITE: &str = "www.netflix.com";
 const X_WEBSITE: &str = "www.x.com";
 
 /// Matches command line arguments and converts them to corresponding website URLs.
@@ -14,8 +16,9 @@ const X_WEBSITE: &str = "www.x.com";
 pub fn match_args(arguments: &Vec<String>) -> Vec<String> {
     let mut vec_arg_websites: Vec<String> = Vec::new();
     for arg in arguments {
-        match arg.as_str() {
+        match arg.to_lowercase().as_str() {
             YOUTUBE => vec_arg_websites.push(YOUTUBE_WEBSITE.to_string()),
+            NETFLIX => vec_arg_websites.push(NETFLIX_WEBSITE.to_string()),
             X => vec_arg_websites.push(X_WEBSITE.to_string()),
             _ => continue,
         }
@@ -58,10 +61,25 @@ mod tests {
     }
 
     #[test]
-    fn test_match_args_with_multiple_platforms() {
-        let args = vec![YOUTUBE.to_string(), X.to_string()];
+    fn test_match_args_with_netflix() {
+        let args = vec![NETFLIX.to_uppercase().to_string()];
         let result = match_args(&args);
-        assert_eq!(result.len(), 2, "Should return two website URLs");
+        assert_eq!(result.len(), 1, "Should return one website URL");
+        assert_eq!(result[0], NETFLIX_WEBSITE, "Should return X website URL");
+    }
+    #[test]
+    fn test_match_args_with_multiple_platforms() {
+        let args = vec![
+            NETFLIX.to_uppercase().to_string(),
+            YOUTUBE.to_string(),
+            X.to_string(),
+        ];
+        let result = match_args(&args);
+        assert_eq!(result.len(), 3, "Should return two website URLs");
+        assert!(
+            result.contains(&NETFLIX_WEBSITE.to_string()),
+            "Should contain Netflix website URL"
+        );
         assert!(
             result.contains(&YOUTUBE_WEBSITE.to_string()),
             "Should contain YouTube website URL"
