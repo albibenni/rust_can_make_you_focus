@@ -4,7 +4,9 @@ mod utils;
 #[path = "./hosts/file_edit.rs"]
 mod file_edit;
 
-const FILE_PATH: &str = "src/utils/reset_default_file.txt";
+const RESET_FILE_PATH: &str = "src/utils/reset_default_file.txt";
+const FILE_PATH: &str = "/etc/hosts";
+const LOCALHOST: &str = "127.0.0.1";
 
 fn main() -> Result<(), std::io::Error> {
     println!("Hello, Let's focus!");
@@ -17,8 +19,7 @@ fn main() -> Result<(), std::io::Error> {
     if parse_host_files.is_err() {
         return parse_host_files;
     }
-    let reset_res = utils::reset_file(FILE_PATH);
-    //let res = std::fs::write(FILE_PATH, reset_file);
-    println!("{:?}", reset_res);
-    return reset_res;
+    // todo add sleep time based on arg timer for pomodoro
+    //sleep(std::time::Duration::new(1, 0));
+    return utils::reset_file(RESET_FILE_PATH);
 }

@@ -1,5 +1,4 @@
-const FILE_PATH: &str = "/etc/hosts";
-const LOCALHOST: &str = "127.0.0.1";
+use crate::{FILE_PATH, LOCALHOST};
 
 /// Modifies the system hosts file to add new host entries.
 ///

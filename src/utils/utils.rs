@@ -35,9 +35,23 @@ pub fn match_args(arguments: &Vec<String>) -> Vec<&str> {
     return vec_arg_websites;
 }
 
+/// Resets the contents of the main file to match the contents of the specified file.
+///
+/// # Arguments
+///
+/// * `file_path` - The path to the file whose contents will be used to reset the main file.
+///
+/// # Returns
+///
+/// * `Result<(), std::io::Error>` - Ok if the file was reset successfully, Err otherwise.
+///
+/// # Panics
+///
+/// Panics if the specified file does not exist or cannot be read.
 pub fn reset_file(file_path: &str) -> Result<(), std::io::Error> {
+    println!("{}", file_path);
     let file_reset = std::fs::read_to_string(file_path).expect("No such file or directory!");
-    let res = std::fs::write(FILE_PATH, file_reset);
+    let res = std::fs::write(FILE_PATH, &file_reset);
     return res;
 }
 
