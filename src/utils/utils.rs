@@ -52,8 +52,8 @@ pub fn match_args(arguments: &Vec<String>) -> Vec<&str> {
 /// Panics if the specified file does not exist or cannot be read.
 pub fn reset_file(file_path: &str) -> Result<(), std::io::Error> {
     let file_reset = std::fs::read_to_string(file_path).expect("No such file or directory!");
-    let res = std::fs::write(FILE_PATH, &file_reset);
-    execute_flux_cache();
+    let _res = std::fs::write(FILE_PATH, &file_reset);
+    let res = execute_flux_cache();
     return res;
 }
 
@@ -98,13 +98,37 @@ fn add_website_based_on_preset(preset: &String) -> Vec<&str> {
     return webs;
 }
 
-pub fn execute_flux_cache() -> () {
-    let r = Command::new("sh")
-        //.arg("-c")
-        .arg("dscacheutil -flushcache")
+/// Flushes the DNS cache on macOS systems using the dscacheutil command.
+///
+/// This function executes the shell command `dscacheutil -flushcache` which is
+/// used to clear the DNS cache on macOS.
+///
+/// # Returns
+///
+/// Returns `Ok(())` if the command executes successfully, or an `Err` containing
+/// the error message if it fails.
+pub fn execute_flux_cache() -> Result<(), std::io::Error> {
+    return Command::new("dscacheutil")
+        .arg("-flushcache")
         .output()
-        .expect("Failed to execute_flux_cache");
-    println!("{:?}", r.stdout);
+        .map(|_| ())
+        .map_err(|e| e);
+}
+
+pub fn plan_sleep(seconds: u64) {
+    std::thread::sleep(std::time::Duration::new(seconds, 0));
+}
+
+pub fn help() -> () {
+    println!("Provide as many arguments as you want of those supported: ");
+    println!("  - {} ", YOUTUBE);
+    println!("  - {} ", X);
+    println!("  - {} ", NETFLIX);
+    println!("Provide a preset of those supported: ");
+    println!("  - {} ", ALL);
+    println!("  - {} ", CODING);
+    println!("  - {} ", STUDYING);
+    println!("As last argument provide the Pomodoro timer in minutes until then the websites are blocked");
 }
 
 #[cfg(test)]

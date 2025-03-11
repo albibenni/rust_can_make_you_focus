@@ -13,15 +13,36 @@ const LOCALHOST: &str = "127.0.0.1";
 fn main() -> Result<(), std::io::Error> {
     println!("Hello, Let's focus!");
 
-    let arguments: Vec<String> = std::env::args().map(|arg| arg).collect();
+    let mut arguments: Vec<String> = std::env::args().map(|arg| arg).collect();
+    if arguments.len() <= 1 {
+        panic!("arguments must be defined");
+    }
+    if arguments
+        .get(1)
+        .expect("No arguments provided")
+        .to_lowercase()
+        == "help"
+    {
+        utils::help();
+        return Ok(());
+    }
+
+    let sleep_time: u64 = arguments
+        .pop()
+        .expect("Something went wrong")
+        .parse::<u64>()
+        .expect("You didn't provide a number");
     let match_arg = utils::match_args(&arguments);
     let parse_host_files = file_edit::parse_hosts_file(&match_arg);
 
     if parse_host_files.is_err() {
         return parse_host_files;
     }
-    execute_flux_cache();
+    let res_flux = execute_flux_cache();
+    if res_flux.is_err() {
+        return res_flux;
+    }
     // todo add sleep time based on arg timer for pomodoro
-    //std::thread::sleep(std::time::Duration::new(20, 0));
+    utils::plan_sleep(sleep_time);
     return utils::reset_file(RESET_FILE_PATH);
 }
