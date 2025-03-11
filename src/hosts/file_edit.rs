@@ -40,6 +40,18 @@ mod tests {
         let file_path = temp_file.path().to_string_lossy().to_string();
         (temp_file, file_path)
     }
+    // Test version of parse_hosts_file that accepts a file path
+    fn parse_hosts_file_test(args: &Vec<String>, file_path: &str) -> Result<(), std::io::Error> {
+        let mut file: String = std::fs::read_to_string(file_path)?;
+        for arg in args {
+            file.push_str(LOCALHOST);
+            file.push_str("               ");
+            file.push_str(arg);
+            file.push_str("\n");
+        }
+
+        return std::fs::write(file_path, file);
+    }
 
     #[test]
     fn test_parse_hosts_file_adds_entries() {
@@ -64,19 +76,6 @@ mod tests {
         assert!(modified_content.contains("# Initial hosts file"));
 
         // Cleanup happens automatically when temp_file goes out of scope
-    }
-
-    // Test version of parse_hosts_file that accepts a file path
-    fn parse_hosts_file_test(args: &Vec<String>, file_path: &str) -> Result<(), std::io::Error> {
-        let mut file: String = std::fs::read_to_string(file_path)?;
-        for arg in args {
-            file.push_str(LOCALHOST);
-            file.push_str("               ");
-            file.push_str(arg);
-            file.push_str("\n");
-        }
-
-        return std::fs::write(file_path, file);
     }
 
     #[test]

@@ -1,3 +1,5 @@
+use crate::FILE_PATH;
+
 const YOUTUBE: &str = "youtube";
 const X: &str = "x";
 const NETFLIX: &str = "netflix";
@@ -19,10 +21,6 @@ const STUDYING: &str = "studying";
 pub fn match_args(arguments: &Vec<String>) -> Vec<&str> {
     let supported_preset: Vec<&str> = vec![ALL, STUDYING, CODING];
     let mut vec_arg_websites: Vec<&str> = Vec::new();
-    // preset
-    // - all
-    // - coding
-
     for arg in arguments {
         if supported_preset.contains(&arg.to_lowercase().as_str()) {
             vec_arg_websites = add_website_based_on_preset(&arg);
@@ -35,6 +33,12 @@ pub fn match_args(arguments: &Vec<String>) -> Vec<&str> {
         }
     }
     return vec_arg_websites;
+}
+
+pub fn reset_file(file_path: &str) -> Result<(), std::io::Error> {
+    let file_reset = std::fs::read_to_string(file_path).expect("No such file or directory!");
+    let res = std::fs::write(FILE_PATH, file_reset);
+    return res;
 }
 
 /// Generates a list of website URLs based on a specified preset category.
