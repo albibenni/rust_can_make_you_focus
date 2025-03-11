@@ -1,3 +1,5 @@
+use utils::execute_flux_cache;
+
 #[path = "./utils/utils.rs"]
 mod utils;
 
@@ -18,7 +20,8 @@ fn main() -> Result<(), std::io::Error> {
     if parse_host_files.is_err() {
         return parse_host_files;
     }
+    execute_flux_cache();
     // todo add sleep time based on arg timer for pomodoro
-    //sleep(std::time::Duration::new(1, 0));
+    //std::thread::sleep(std::time::Duration::new(20, 0));
     return utils::reset_file(RESET_FILE_PATH);
 }

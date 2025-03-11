@@ -1,3 +1,5 @@
+use std::process::Command;
+
 use crate::FILE_PATH;
 
 const YOUTUBE: &str = "youtube";
@@ -51,6 +53,7 @@ pub fn match_args(arguments: &Vec<String>) -> Vec<&str> {
 pub fn reset_file(file_path: &str) -> Result<(), std::io::Error> {
     let file_reset = std::fs::read_to_string(file_path).expect("No such file or directory!");
     let res = std::fs::write(FILE_PATH, &file_reset);
+    execute_flux_cache();
     return res;
 }
 
@@ -93,6 +96,15 @@ fn add_website_based_on_preset(preset: &String) -> Vec<&str> {
         }
     }
     return webs;
+}
+
+pub fn execute_flux_cache() -> () {
+    let r = Command::new("sh")
+        //.arg("-c")
+        .arg("dscacheutil -flushcache")
+        .output()
+        .expect("Failed to execute_flux_cache");
+    println!("{:?}", r.stdout);
 }
 
 #[cfg(test)]
@@ -292,5 +304,16 @@ mod tests {
     fn test_add_website_based_on_preset_invalid() {
         let preset = "INVALID_PRESET".to_string();
         add_website_based_on_preset(&preset); // Should panic
+    }
+
+    #[test]
+    fn test_reset_file_nonexistent() {
+        // Try to reset using a non-existent file
+        let result = std::panic::catch_unwind(|| reset_file("nonexistent_file.txt"));
+
+        assert!(
+            result.is_err(),
+            "Function should panic when file doesn't exist"
+        );
     }
 }
