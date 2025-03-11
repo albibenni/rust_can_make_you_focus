@@ -49,7 +49,6 @@ pub fn match_args(arguments: &Vec<String>) -> Vec<&str> {
 ///
 /// Panics if the specified file does not exist or cannot be read.
 pub fn reset_file(file_path: &str) -> Result<(), std::io::Error> {
-    println!("{}", file_path);
     let file_reset = std::fs::read_to_string(file_path).expect("No such file or directory!");
     let res = std::fs::write(FILE_PATH, &file_reset);
     return res;
@@ -160,7 +159,6 @@ mod tests {
     fn test_match_args_with_preset() {
         let args = vec![ALL.to_string()];
         let result = match_args(&args);
-        println!("AAAAAA {:?}", result);
         assert_eq!(result.len(), 3, "Should return three website URLs");
         assert!(
             result.contains(&NETFLIX_WEBSITE),

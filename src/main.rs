@@ -13,7 +13,6 @@ fn main() -> Result<(), std::io::Error> {
 
     let arguments: Vec<String> = std::env::args().map(|arg| arg).collect();
     let match_arg = utils::match_args(&arguments);
-    println!("{:?}", match_arg);
     let parse_host_files = file_edit::parse_hosts_file(&match_arg);
 
     if parse_host_files.is_err() {
