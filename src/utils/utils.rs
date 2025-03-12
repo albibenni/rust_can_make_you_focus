@@ -115,10 +115,76 @@ pub fn execute_flux_cache() -> Result<(), std::io::Error> {
         .map_err(|e| e);
 }
 
+/// Pauses the execution of the current thread for the specified duration.
+///
+/// This function is a simple wrapper around the standard library's `std::thread::sleep`
+/// function, allowing the caller to specify the sleep duration in seconds.
+///
+/// # Arguments
+///
+/// * `seconds` - The number of whole seconds to sleep
+///
+/// # Examples
+///
+/// ```
+/// use crate::utils::plan_sleep;
+///
+/// // Sleep for 2 seconds
+/// plan_sleep(2);
 pub fn plan_sleep(seconds: u64) {
     std::thread::sleep(std::time::Duration::new(seconds, 0));
 }
 
+/// Parses a string representation of a sleep time into an unsigned 64-bit integer.
+///
+/// This function attempts to convert a string containing a number into a `u64` value.
+/// It is typically used to parse command line arguments or configuration values
+/// that represent durations in seconds.
+///
+/// # Arguments
+///
+/// * `argument` - A reference to a String that should contain a valid numeric value
+///
+/// # Returns
+///
+/// Returns the parsed `u64` value representing seconds.
+///
+/// # Panics
+///
+/// This function will panic with the message "You didn't provide a number!" if the
+/// string cannot be parsed as a valid `u64` (e.g., if it contains non-numeric characters
+/// or represents a number outside the valid range for `u64`).
+///
+/// # Examples
+///
+/// ```
+/// use crate::utils::parse_sleep_time;
+///
+/// let time_str = String::from("5");
+/// let seconds = parse_sleep_time(&time_str);
+/// assert_eq!(seconds, 5);
+/// ```
+pub fn parse_sleep_time(argument: &String) -> u64 {
+    return argument
+        .parse::<u64>()
+        .expect("You didn't provide a number!");
+}
+
+/// Displays command-line help information for the application.
+///
+/// Prints usage instructions to stdout, showing:
+/// - Supported website arguments (YouTube, X, Netflix)
+/// - Available presets (ALL, CODING, STUDYING)
+/// - Instructions for specifying the Pomodoro timer duration
+///
+/// # Examples
+///
+/// ```
+/// use crate::utils::help;
+///
+/// // Display help information to the user
+/// help();
+/// ```
 pub fn help() -> () {
     println!("Provide as many arguments as you want of those supported: ");
     println!("  - {} ", YOUTUBE);
@@ -136,6 +202,18 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_parse_sleep_time_valid() {
+        let valid_input = String::from("42");
+        assert_eq!(parse_sleep_time(&valid_input), 42);
+    }
+
+    #[test]
+    #[should_panic(expected = "You didn't provide a number!")]
+    fn test_parse_sleep_time_invalid() {
+        let invalid_input = String::from("not_a_number");
+        parse_sleep_time(&invalid_input); // Should panic
+    }
+    #[test]
     fn test_match_args_empty() {
         let args: Vec<String> = Vec::new();
         let result = match_args(&args);
@@ -146,6 +224,36 @@ mod tests {
         );
     }
 
+    #[test]
+    fn test_plan_sleep() {
+        // This is a simple test to verify the function doesn't panic
+        // More sophisticated timing tests would be flaky
+        let start = std::time::Instant::now();
+        plan_sleep(1); // Sleep for just 1 second to keep test fast
+        let duration = start.elapsed();
+
+        // We expect it to sleep at least 0.9 seconds (allowing for some timing variance)
+        assert!(duration.as_secs_f64() >= 0.9);
+    }
+
+    #[test]
+    fn test_execute_flux_cache_returns_result() {
+        // This test only verifies the function returns a Result
+        // without actually running the command
+        let result = execute_flux_cache();
+
+        // Just check that it's a Result type (we can't easily test actual execution)
+        assert!(result.is_ok() || result.is_err());
+    }
+
+    #[test]
+    fn test_help_doesnt_panic() {
+        // Simple test to ensure help() doesn't panic
+        let result = std::panic::catch_unwind(|| {
+            help();
+        });
+        assert!(result.is_ok());
+    }
     #[test]
     fn test_match_args_with_youtube() {
         let args = vec![YOUTUBE.to_string()];

@@ -1,3 +1,5 @@
+use std::u64;
+
 use utils::execute_flux_cache;
 
 #[path = "./utils/utils.rs"]
@@ -27,12 +29,15 @@ fn main() -> Result<(), std::io::Error> {
         return Ok(());
     }
 
-    let sleep_time: u64 = arguments
-        .pop()
-        .expect("Something went wrong")
-        .parse::<u64>()
-        .expect("You didn't provide a number");
-    let match_arg = utils::match_args(&arguments);
+    // let sleep_time: u64 = arguments
+    //     .pop()
+    //     .expect("Something went wrong")
+    //     .parse::<u64>()
+    //     .expect("You didn't provide a number");
+    let last_arg: String = arguments.pop().expect("Something went wrong");
+    let sleep_time: u64 = utils::parse_sleep_time(&last_arg);
+    let match_arg: Vec<&str> = utils::match_args(&arguments);
+
     let parse_host_files = file_edit::parse_hosts_file(&match_arg);
 
     if parse_host_files.is_err() {
