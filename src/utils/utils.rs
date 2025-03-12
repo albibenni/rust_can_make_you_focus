@@ -136,10 +136,10 @@ pub fn plan_sleep(seconds: u64) {
 }
 
 /// Parses a string representation of a sleep time into an unsigned 64-bit integer.
+/// After the parsing it converts the number, taken in minutes from the cli,
+/// in seconds for the `plan_sleep()` function
 ///
 /// This function attempts to convert a string containing a number into a `u64` value.
-/// It is typically used to parse command line arguments or configuration values
-/// that represent durations in seconds.
 ///
 /// # Arguments
 ///
@@ -167,6 +167,7 @@ pub fn plan_sleep(seconds: u64) {
 pub fn parse_sleep_time(argument: &String) -> u64 {
     return argument
         .parse::<u64>()
+        .map(|n| n * 60)
         .expect("You didn't provide a number!");
 }
 
@@ -204,9 +205,14 @@ mod tests {
     #[test]
     fn test_parse_sleep_time_valid() {
         let valid_input = String::from("42");
-        assert_eq!(parse_sleep_time(&valid_input), 42);
+        assert_eq!(parse_sleep_time(&valid_input), 42 * 60);
     }
 
+    #[test]
+    fn test_parse_sleep_time_valid2() {
+        let valid_input = String::from("1");
+        assert_eq!(parse_sleep_time(&valid_input), 60);
+    }
     #[test]
     #[should_panic(expected = "You didn't provide a number!")]
     fn test_parse_sleep_time_invalid() {
