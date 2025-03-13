@@ -50,8 +50,7 @@ pub fn match_args(arguments: &Vec<String>) -> Vec<&str> {
 /// # Panics
 ///
 /// Panics if the specified file does not exist or cannot be read.
-pub fn reset_file(file_path: &str) -> Result<(), std::io::Error> {
-    let file_reset = std::fs::read_to_string(file_path).expect("No such file or directory!");
+pub fn reset_file(file_reset: &str) -> Result<(), std::io::Error> {
     let _res = std::fs::write(FILE_PATH, &file_reset);
     let res = execute_flux_cache();
     return res;
@@ -444,16 +443,5 @@ mod tests {
     fn test_add_website_based_on_preset_invalid() {
         let preset = "INVALID_PRESET".to_string();
         add_website_based_on_preset(&preset); // Should panic
-    }
-
-    #[test]
-    fn test_reset_file_nonexistent() {
-        // Try to reset using a non-existent file
-        let result = std::panic::catch_unwind(|| reset_file("nonexistent_file.txt"));
-
-        assert!(
-            result.is_err(),
-            "Function should panic when file doesn't exist"
-        );
     }
 }

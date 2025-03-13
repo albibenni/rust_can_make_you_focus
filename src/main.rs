@@ -4,7 +4,17 @@ mod utils;
 
 mod hosts;
 
-const RESET_FILE_PATH: &str = "src/utils/reset_default_file.txt";
+const RESET_FILE_PATH: &str = "
+##
+# Host Database
+#
+# localhost is used to configure the loopback interface
+# when the system is booting.  Do not change this entry.
+##
+127.0.0.1		localhost
+255.255.255.255		broadcasthost
+::1                          localhost
+";
 const FILE_PATH: &str = "/etc/hosts";
 const LOCALHOST: &str = "127.0.0.1";
 
