@@ -132,7 +132,9 @@ pub fn execute_flux_cache() -> Result<(), std::io::Error> {
 /// // Sleep for 2 seconds
 /// plan_sleep(2);
 pub fn plan_sleep(seconds: u64) {
+    println!("Pomodoro Starting for: {} minutes", seconds as f64 / 60.0);
     std::thread::sleep(std::time::Duration::new(seconds, 0));
+    println!("Pomodoro Ended, Good job");
 }
 
 /// Parses a string representation of a sleep time into an unsigned 64-bit integer.

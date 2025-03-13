@@ -1,12 +1,8 @@
 use std::u64;
 
-use utils::execute_flux_cache;
-
-#[path = "./utils/utils.rs"]
 mod utils;
 
-#[path = "./hosts/file_edit.rs"]
-mod file_edit;
+mod hosts;
 
 const RESET_FILE_PATH: &str = "src/utils/reset_default_file.txt";
 const FILE_PATH: &str = "/etc/hosts";
@@ -25,29 +21,23 @@ fn main() -> Result<(), std::io::Error> {
         .to_lowercase()
         == "help"
     {
-        utils::help();
+        utils::utils::help();
         return Ok(());
     }
 
-    // let sleep_time: u64 = arguments
-    //     .pop()
-    //     .expect("Something went wrong")
-    //     .parse::<u64>()
-    //     .expect("You didn't provide a number");
     let last_arg: String = arguments.pop().expect("Something went wrong");
-    let sleep_time: u64 = utils::parse_sleep_time(&last_arg);
-    let match_arg: Vec<&str> = utils::match_args(&arguments);
+    let sleep_time: u64 = utils::utils::parse_sleep_time(&last_arg);
+    let match_arg: Vec<&str> = utils::utils::match_args(&arguments);
 
-    let parse_host_files = file_edit::parse_hosts_file(&match_arg);
+    let parse_host_files = hosts::file_edit::parse_hosts_file(&match_arg);
 
     if parse_host_files.is_err() {
         return parse_host_files;
     }
-    let res_flux = execute_flux_cache();
+    let res_flux = utils::utils::execute_flux_cache();
     if res_flux.is_err() {
         return res_flux;
     }
-    // todo add sleep time based on arg timer for pomodoro
-    utils::plan_sleep(sleep_time);
-    return utils::reset_file(RESET_FILE_PATH);
+    utils::utils::plan_sleep(sleep_time);
+    return utils::utils::reset_file(RESET_FILE_PATH);
 }
