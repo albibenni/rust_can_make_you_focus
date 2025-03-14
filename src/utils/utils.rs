@@ -5,9 +5,14 @@ use crate::FILE_PATH;
 const YOUTUBE: &str = "youtube";
 const X: &str = "x";
 const NETFLIX: &str = "netflix";
+const FACEBOOK: &str = "facebook";
+const META: &str = "meta";
+const INSTAGRAM: &str = "instagram";
 const YOUTUBE_WEBSITE: &str = "www.youtube.com";
 const NETFLIX_WEBSITE: &str = "www.netflix.com";
 const X_WEBSITE: &str = "www.x.com";
+const FACEBOOK_WEBSITE: &str = "www.facebook.com";
+const INSTAGRAM_WEBSITE: &str = "www.instagram.com";
 const ALL: &str = "all";
 const CODING: &str = "coding";
 const STUDYING: &str = "studying";
@@ -31,6 +36,9 @@ pub fn match_args(arguments: &Vec<String>) -> Vec<&str> {
             YOUTUBE => vec_arg_websites.push(YOUTUBE_WEBSITE),
             NETFLIX => vec_arg_websites.push(NETFLIX_WEBSITE),
             X => vec_arg_websites.push(X_WEBSITE),
+            INSTAGRAM => vec_arg_websites.push(INSTAGRAM_WEBSITE),
+            META => vec_arg_websites.push(FACEBOOK_WEBSITE),
+            FACEBOOK => vec_arg_websites.push(FACEBOOK_WEBSITE),
             _ => continue,
         }
     }
@@ -76,15 +84,21 @@ fn add_website_based_on_preset(preset: &String) -> Vec<&str> {
             webs.push(YOUTUBE_WEBSITE);
             webs.push(X_WEBSITE);
             webs.push(NETFLIX_WEBSITE);
+            webs.push(FACEBOOK_WEBSITE);
+            webs.push(INSTAGRAM_WEBSITE);
         }
         CODING => {
             webs.push(YOUTUBE_WEBSITE);
             webs.push(X_WEBSITE);
+            webs.push(FACEBOOK_WEBSITE);
+            webs.push(INSTAGRAM_WEBSITE);
         }
         STUDYING => {
             webs.push(YOUTUBE_WEBSITE);
             webs.push(X_WEBSITE);
             webs.push(NETFLIX_WEBSITE);
+            webs.push(FACEBOOK_WEBSITE);
+            webs.push(INSTAGRAM_WEBSITE);
         }
         _ => {
             panic!("preset not defined, consider adding a new preset");
@@ -337,7 +351,7 @@ mod tests {
             X.to_string(),
         ];
         let result = match_args(&args);
-        assert_eq!(result.len(), 3, "Should return two website URLs");
+        assert_eq!(result.len(), 3, "Should return 3 website URLs");
         assert!(
             result.contains(&NETFLIX_WEBSITE),
             "Should contain Netflix website URL"
@@ -352,7 +366,7 @@ mod tests {
     fn test_match_args_with_preset() {
         let args = vec![ALL.to_string()];
         let result = match_args(&args);
-        assert_eq!(result.len(), 3, "Should return three website URLs");
+        assert_eq!(result.len(), 5, "Should return 5 website URLs");
         assert!(
             result.contains(&NETFLIX_WEBSITE),
             "Should contain Netflix website URL"
@@ -362,13 +376,21 @@ mod tests {
             "Should contain YouTube website URL"
         );
         assert!(result.contains(&X_WEBSITE), "Should contain X website URL");
+        assert!(
+            result.contains(&FACEBOOK_WEBSITE),
+            "Should contain Facebook website URL"
+        );
+        assert!(
+            result.contains(&INSTAGRAM_WEBSITE),
+            "Should contain YouTube website URL"
+        );
     }
 
     #[test]
     fn test_match_args_with_preset_study() {
         let args = vec![STUDYING.to_string()];
         let result = match_args(&args);
-        assert_eq!(result.len(), 3, "Should return three website URLs");
+        assert_eq!(result.len(), 5, "Should return 4 website URLs");
         assert!(
             result.contains(&NETFLIX_WEBSITE),
             "Should contain Netflix website URL"
@@ -378,18 +400,34 @@ mod tests {
             "Should contain YouTube website URL"
         );
         assert!(result.contains(&X_WEBSITE), "Should contain X website URL");
+        assert!(
+            result.contains(&FACEBOOK_WEBSITE),
+            "Should contain Facebook website URL"
+        );
+        assert!(
+            result.contains(&INSTAGRAM_WEBSITE),
+            "Should contain YouTube website URL"
+        );
     }
 
     #[test]
     fn test_match_args_with_preset_coding() {
         let args = vec![CODING.to_string()];
         let result = match_args(&args);
-        assert_eq!(result.len(), 2, "Should return three website URLs");
+        assert_eq!(result.len(), 4, "Should return 4 website URLs");
         assert!(
             result.contains(&YOUTUBE_WEBSITE),
             "Should contain YouTube website URL"
         );
         assert!(result.contains(&X_WEBSITE), "Should contain X website URL");
+        assert!(
+            result.contains(&FACEBOOK_WEBSITE),
+            "Should contain Facebook website URL"
+        );
+        assert!(
+            result.contains(&INSTAGRAM_WEBSITE),
+            "Should contain YouTube website URL"
+        );
     }
 
     #[test]
@@ -408,7 +446,7 @@ mod tests {
         let preset = ALL.to_string();
         let websites = add_website_based_on_preset(&preset);
 
-        assert_eq!(websites.len(), 3, "ALL preset should return 3 websites");
+        assert_eq!(websites.len(), 5, "ALL preset should return 5 websites");
         assert!(
             websites.contains(&YOUTUBE_WEBSITE),
             "ALL preset should contain YouTube"
@@ -418,6 +456,14 @@ mod tests {
             websites.contains(&NETFLIX_WEBSITE),
             "ALL preset should contain Netflix"
         );
+        assert!(
+            websites.contains(&FACEBOOK_WEBSITE),
+            "Should contain Facebook website URL"
+        );
+        assert!(
+            websites.contains(&INSTAGRAM_WEBSITE),
+            "Should contain YouTube website URL"
+        );
     }
 
     #[test]
@@ -425,7 +471,7 @@ mod tests {
         let preset = CODING.to_string();
         let websites = add_website_based_on_preset(&preset);
 
-        assert_eq!(websites.len(), 2, "CODING preset should return 2 websites");
+        assert_eq!(websites.len(), 4, "CODING preset should return 4 websites");
         assert!(
             websites.contains(&YOUTUBE_WEBSITE),
             "CODING preset should contain YouTube"
@@ -435,8 +481,12 @@ mod tests {
             "CODING preset should contain X"
         );
         assert!(
-            !websites.contains(&NETFLIX_WEBSITE),
-            "CODING preset should not contain Netflix"
+            websites.contains(&FACEBOOK_WEBSITE),
+            "Should contain Facebook website URL"
+        );
+        assert!(
+            websites.contains(&INSTAGRAM_WEBSITE),
+            "Should contain YouTube website URL"
         );
     }
 
@@ -445,7 +495,7 @@ mod tests {
         let preset = STUDYING.to_string();
         let websites = add_website_based_on_preset(&preset);
 
-        assert_eq!(websites.len(), 3, "STUDING preset should return 3 websites");
+        assert_eq!(websites.len(), 5, "STUDING preset should return 5 websites");
         assert!(
             websites.contains(&YOUTUBE_WEBSITE),
             "STUDING preset should contain YouTube"
@@ -458,6 +508,14 @@ mod tests {
             websites.contains(&NETFLIX_WEBSITE),
             "STUDING preset should contain Netflix"
         );
+        assert!(
+            websites.contains(&FACEBOOK_WEBSITE),
+            "Should contain Facebook website URL"
+        );
+        assert!(
+            websites.contains(&INSTAGRAM_WEBSITE),
+            "Should contain YouTube website URL"
+        );
     }
 
     #[test]
@@ -467,8 +525,8 @@ mod tests {
 
         assert_eq!(
             websites.len(),
-            2,
-            "Case insensitive CODING preset should return 2 websites"
+            4,
+            "Case insensitive CODING preset should return 4 websites"
         );
         assert!(
             websites.contains(&YOUTUBE_WEBSITE),
@@ -478,8 +536,78 @@ mod tests {
             websites.contains(&X_WEBSITE),
             "Case insensitive CODING preset should contain X"
         );
+        assert!(
+            websites.contains(&FACEBOOK_WEBSITE),
+            "Should contain CODING preset should contain Facebook"
+        );
+        assert!(
+            websites.contains(&INSTAGRAM_WEBSITE),
+            "Should contain CODING preset should contain Instragram"
+        );
+    }
+    #[test]
+    fn test_add_website_based_on_preset_case_insensitive_studying() {
+        let preset = "stUdYing".to_string();
+        let websites = add_website_based_on_preset(&preset);
+
+        assert_eq!(
+            websites.len(),
+            5,
+            "Case insensitive studying preset should return 5 websites"
+        );
+        assert!(
+            websites.contains(&YOUTUBE_WEBSITE),
+            "Case insensitive studying preset should contain YouTube"
+        );
+        assert!(
+            websites.contains(&NETFLIX_WEBSITE),
+            "Case insensitive studying preset should contain YouTube"
+        );
+        assert!(
+            websites.contains(&X_WEBSITE),
+            "Case insensitive studying preset should contain X"
+        );
+        assert!(
+            websites.contains(&FACEBOOK_WEBSITE),
+            "Should contain studying preset should contain Facebook"
+        );
+        assert!(
+            websites.contains(&INSTAGRAM_WEBSITE),
+            "Should contain studying preset should contain Instragram"
+        );
     }
 
+    #[test]
+    fn test_add_website_based_on_preset_case_insensitive_all() {
+        let preset = "aLl".to_string();
+        let websites = add_website_based_on_preset(&preset);
+
+        assert_eq!(
+            websites.len(),
+            5,
+            "Case insensitive ALL preset should return 5 websites"
+        );
+        assert!(
+            websites.contains(&YOUTUBE_WEBSITE),
+            "Case insensitive All preset should contain YouTube"
+        );
+        assert!(
+            websites.contains(&NETFLIX_WEBSITE),
+            "Case insensitive All preset should contain YouTube"
+        );
+        assert!(
+            websites.contains(&X_WEBSITE),
+            "Case insensitive All preset should contain X"
+        );
+        assert!(
+            websites.contains(&FACEBOOK_WEBSITE),
+            "Should contain All preset should contain Facebook"
+        );
+        assert!(
+            websites.contains(&INSTAGRAM_WEBSITE),
+            "Should contain ALL preset should contain Instragram"
+        );
+    }
     #[test]
     #[should_panic(expected = "preset not defined")]
     fn test_add_website_based_on_preset_invalid() {
