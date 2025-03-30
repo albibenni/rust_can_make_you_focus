@@ -27,6 +27,13 @@
           - instagram
           - whatsapp web
           - discord web
+        - **STUDYING_YT** blocks:
+          - x
+          - netflix
+          - facebook
+          - instagram
+          - whatsapp web
+          - discord web
         - **CODING** blocks:
           - youtube
           - x
