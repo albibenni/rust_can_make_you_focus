@@ -14,12 +14,12 @@ const DISCORD: &str = "discord";
 
 // Websites
 const YOUTUBE_WEBSITE: &str = "www.youtube.com";
-const NETFLIX_WEBSITE: &str = "www.netflix.com";
+const NETFLIX_WEBSITE: &str = "netflix.com";
 const X_WEBSITE: &str = "www.x.com";
 const FACEBOOK_WEBSITE: &str = "www.facebook.com";
 const INSTAGRAM_WEBSITE: &str = "www.instagram.com";
-const WHATSAPP_WEBSITE: &str = "www.web.whatsapp.com";
-const DISCORD_WEBSITE: &str = "www.discord.com";
+const WHATSAPP_WEBSITE: &str = "web.whatsapp.com";
+const DISCORD_WEBSITE: &str = "discord.com";
 
 // Presets
 const ALL: &str = "all";
@@ -42,7 +42,6 @@ pub fn match_args(arguments: &Vec<String>) -> Vec<&str> {
     for arg in arguments {
         if supported_preset.contains(&arg.to_lowercase().as_str()) {
             vec_arg_websites = add_website_based_on_preset(&arg);
-            println!("here: {:?}", vec_arg_websites);
         }
         match arg.to_lowercase().as_str() {
             YOUTUBE => vec_arg_websites.push(YOUTUBE_WEBSITE),
