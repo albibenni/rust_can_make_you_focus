@@ -17,14 +17,27 @@
           - netflix
           - facebook
           - instagram
+          - whatsapp web
+          - discord web
         - **STUDYING** blocks:
           - youtube
           - x
           - netflix
           - facebook
           - instagram
+          - whatsapp web
+          - discord web
         - **CODING** blocks:
           - youtube
           - x
           - facebook
           - instagram
+          - whatsapp web
+          - discord web
+        - **CODING_YT** blocks:
+          - netflix
+          - x
+          - facebook
+          - instagram
+          - whatsapp web
+          - discord web
