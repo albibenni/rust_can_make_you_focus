@@ -13,9 +13,13 @@ const NETFLIX_WEBSITE: &str = "www.netflix.com";
 const X_WEBSITE: &str = "www.x.com";
 const FACEBOOK_WEBSITE: &str = "www.facebook.com";
 const INSTAGRAM_WEBSITE: &str = "www.instagram.com";
+const WHATSAPP_WEBSITE: &str = "www.web.whatsapp.com";
+const DISCORD_WEBSITE: &str = "www.discord.com";
 const ALL: &str = "all";
 const CODING: &str = "coding";
 const STUDYING: &str = "studying";
+const WHATSAPP: &str = "whatsapp";
+const DISCORD: &str = "discord";
 
 /// Matches command line arguments and converts them to corresponding website URLs.
 ///
@@ -39,6 +43,8 @@ pub fn match_args(arguments: &Vec<String>) -> Vec<&str> {
             INSTAGRAM => vec_arg_websites.push(INSTAGRAM_WEBSITE),
             META => vec_arg_websites.push(FACEBOOK_WEBSITE),
             FACEBOOK => vec_arg_websites.push(FACEBOOK_WEBSITE),
+            DISCORD => vec_arg_websites.push(DISCORD_WEBSITE),
+            WHATSAPP => vec_arg_websites.push(WHATSAPP_WEBSITE),
             _ => continue,
         }
     }
@@ -86,12 +92,16 @@ fn add_website_based_on_preset(preset: &String) -> Vec<&str> {
             webs.push(NETFLIX_WEBSITE);
             webs.push(FACEBOOK_WEBSITE);
             webs.push(INSTAGRAM_WEBSITE);
+            webs.push(DISCORD_WEBSITE);
+            webs.push(WHATSAPP_WEBSITE);
         }
         CODING => {
             webs.push(YOUTUBE_WEBSITE);
             webs.push(X_WEBSITE);
             webs.push(FACEBOOK_WEBSITE);
             webs.push(INSTAGRAM_WEBSITE);
+            webs.push(DISCORD_WEBSITE);
+            webs.push(WHATSAPP_WEBSITE);
         }
         STUDYING => {
             webs.push(YOUTUBE_WEBSITE);
@@ -99,6 +109,8 @@ fn add_website_based_on_preset(preset: &String) -> Vec<&str> {
             webs.push(NETFLIX_WEBSITE);
             webs.push(FACEBOOK_WEBSITE);
             webs.push(INSTAGRAM_WEBSITE);
+            webs.push(DISCORD_WEBSITE);
+            webs.push(WHATSAPP_WEBSITE);
         }
         _ => {
             panic!("preset not defined, consider adding a new preset");
@@ -366,7 +378,7 @@ mod tests {
     fn test_match_args_with_preset() {
         let args = vec![ALL.to_string()];
         let result = match_args(&args);
-        assert_eq!(result.len(), 5, "Should return 5 website URLs");
+        assert_eq!(result.len(), 7, "Should return 7 website URLs");
         assert!(
             result.contains(&NETFLIX_WEBSITE),
             "Should contain Netflix website URL"
@@ -382,7 +394,15 @@ mod tests {
         );
         assert!(
             result.contains(&INSTAGRAM_WEBSITE),
-            "Should contain YouTube website URL"
+            "Should contain Instagram website URL"
+        );
+        assert!(
+            result.contains(&DISCORD_WEBSITE),
+            "Should contain discord website URL"
+        );
+        assert!(
+            result.contains(&WHATSAPP_WEBSITE),
+            "Should contain whatsapp website URL"
         );
     }
 
@@ -390,7 +410,7 @@ mod tests {
     fn test_match_args_with_preset_study() {
         let args = vec![STUDYING.to_string()];
         let result = match_args(&args);
-        assert_eq!(result.len(), 5, "Should return 4 website URLs");
+        assert_eq!(result.len(), 7, "Should return 7 website URLs");
         assert!(
             result.contains(&NETFLIX_WEBSITE),
             "Should contain Netflix website URL"
@@ -406,7 +426,15 @@ mod tests {
         );
         assert!(
             result.contains(&INSTAGRAM_WEBSITE),
-            "Should contain YouTube website URL"
+            "Should contain Instagram website URL"
+        );
+        assert!(
+            result.contains(&DISCORD_WEBSITE),
+            "Should contain discord website URL"
+        );
+        assert!(
+            result.contains(&WHATSAPP_WEBSITE),
+            "Should contain whatsapp website URL"
         );
     }
 
@@ -414,7 +442,7 @@ mod tests {
     fn test_match_args_with_preset_coding() {
         let args = vec![CODING.to_string()];
         let result = match_args(&args);
-        assert_eq!(result.len(), 4, "Should return 4 website URLs");
+        assert_eq!(result.len(), 6, "Should return 6 website URLs");
         assert!(
             result.contains(&YOUTUBE_WEBSITE),
             "Should contain YouTube website URL"
@@ -426,7 +454,15 @@ mod tests {
         );
         assert!(
             result.contains(&INSTAGRAM_WEBSITE),
-            "Should contain YouTube website URL"
+            "Should contain Instagram website URL"
+        );
+        assert!(
+            result.contains(&DISCORD_WEBSITE),
+            "Should contain discord website URL"
+        );
+        assert!(
+            result.contains(&WHATSAPP_WEBSITE),
+            "Should contain whatsapp website URL"
         );
     }
 
@@ -446,7 +482,7 @@ mod tests {
         let preset = ALL.to_string();
         let websites = add_website_based_on_preset(&preset);
 
-        assert_eq!(websites.len(), 5, "ALL preset should return 5 websites");
+        assert_eq!(websites.len(), 7, "ALL preset should return 7 websites");
         assert!(
             websites.contains(&YOUTUBE_WEBSITE),
             "ALL preset should contain YouTube"
@@ -462,7 +498,15 @@ mod tests {
         );
         assert!(
             websites.contains(&INSTAGRAM_WEBSITE),
-            "Should contain YouTube website URL"
+            "Should contain Instagram website URL"
+        );
+        assert!(
+            websites.contains(&DISCORD_WEBSITE),
+            "Should contain discord website URL"
+        );
+        assert!(
+            websites.contains(&WHATSAPP_WEBSITE),
+            "Should contain whatsapp website URL"
         );
     }
 
@@ -471,7 +515,7 @@ mod tests {
         let preset = CODING.to_string();
         let websites = add_website_based_on_preset(&preset);
 
-        assert_eq!(websites.len(), 4, "CODING preset should return 4 websites");
+        assert_eq!(websites.len(), 6, "CODING preset should return 6 websites");
         assert!(
             websites.contains(&YOUTUBE_WEBSITE),
             "CODING preset should contain YouTube"
@@ -482,11 +526,19 @@ mod tests {
         );
         assert!(
             websites.contains(&FACEBOOK_WEBSITE),
-            "Should contain Facebook website URL"
+            "CODING preset should contain Facebook"
         );
         assert!(
             websites.contains(&INSTAGRAM_WEBSITE),
-            "Should contain YouTube website URL"
+            "CODING preset should contain Instagram"
+        );
+        assert!(
+            websites.contains(&DISCORD_WEBSITE),
+            "CODING preset should contain Discord"
+        );
+        assert!(
+            websites.contains(&WHATSAPP_WEBSITE),
+            "CODING preset should contain whatsapp"
         );
     }
 
@@ -495,7 +547,7 @@ mod tests {
         let preset = STUDYING.to_string();
         let websites = add_website_based_on_preset(&preset);
 
-        assert_eq!(websites.len(), 5, "STUDING preset should return 5 websites");
+        assert_eq!(websites.len(), 7, "STUDING preset should return 7 websites");
         assert!(
             websites.contains(&YOUTUBE_WEBSITE),
             "STUDING preset should contain YouTube"
@@ -510,11 +562,19 @@ mod tests {
         );
         assert!(
             websites.contains(&FACEBOOK_WEBSITE),
-            "Should contain Facebook website URL"
+            "STUDING preset should contain Facebook"
         );
         assert!(
             websites.contains(&INSTAGRAM_WEBSITE),
-            "Should contain YouTube website URL"
+            "STUDING preset should contain Instagram"
+        );
+        assert!(
+            websites.contains(&DISCORD_WEBSITE),
+            "STUDING preset should contain Discord"
+        );
+        assert!(
+            websites.contains(&WHATSAPP_WEBSITE),
+            "STUDING preset should contain whatsapp"
         );
     }
 
@@ -525,8 +585,8 @@ mod tests {
 
         assert_eq!(
             websites.len(),
-            4,
-            "Case insensitive CODING preset should return 4 websites"
+            6,
+            "Case insensitive CODING preset should return 6 websites"
         );
         assert!(
             websites.contains(&YOUTUBE_WEBSITE),
@@ -538,11 +598,19 @@ mod tests {
         );
         assert!(
             websites.contains(&FACEBOOK_WEBSITE),
-            "Should contain CODING preset should contain Facebook"
+            "Case insensitive CODING preset should contain facebook"
         );
         assert!(
             websites.contains(&INSTAGRAM_WEBSITE),
-            "Should contain CODING preset should contain Instragram"
+            "Case insensitive CODING preset should contain instagram"
+        );
+        assert!(
+            websites.contains(&DISCORD_WEBSITE),
+            "Case insensitive CODING preset should contain discord"
+        );
+        assert!(
+            websites.contains(&WHATSAPP_WEBSITE),
+            "Case insensitive CODING preset should contain whatsapp"
         );
     }
     #[test]
@@ -552,8 +620,8 @@ mod tests {
 
         assert_eq!(
             websites.len(),
-            5,
-            "Case insensitive studying preset should return 5 websites"
+            7,
+            "Case insensitive studying preset should return 7 websites"
         );
         assert!(
             websites.contains(&YOUTUBE_WEBSITE),
@@ -561,7 +629,7 @@ mod tests {
         );
         assert!(
             websites.contains(&NETFLIX_WEBSITE),
-            "Case insensitive studying preset should contain YouTube"
+            "Case insensitive studying preset should contain Netflix"
         );
         assert!(
             websites.contains(&X_WEBSITE),
@@ -569,11 +637,19 @@ mod tests {
         );
         assert!(
             websites.contains(&FACEBOOK_WEBSITE),
-            "Should contain studying preset should contain Facebook"
+            "Case insensitive studying preset should contain Facebook"
         );
         assert!(
             websites.contains(&INSTAGRAM_WEBSITE),
-            "Should contain studying preset should contain Instragram"
+            "Case insensitive studying preset should contain Instagram"
+        );
+        assert!(
+            websites.contains(&DISCORD_WEBSITE),
+            "Case insensitive studying preset should contain Discord"
+        );
+        assert!(
+            websites.contains(&WHATSAPP_WEBSITE),
+            "Case insensitive studying preset should contain whatsapp"
         );
     }
 
@@ -584,8 +660,8 @@ mod tests {
 
         assert_eq!(
             websites.len(),
-            5,
-            "Case insensitive ALL preset should return 5 websites"
+            7,
+            "Case insensitive ALL preset should return 7 websites"
         );
         assert!(
             websites.contains(&YOUTUBE_WEBSITE),
@@ -593,7 +669,7 @@ mod tests {
         );
         assert!(
             websites.contains(&NETFLIX_WEBSITE),
-            "Case insensitive All preset should contain YouTube"
+            "Case insensitive All preset should contain Netflix"
         );
         assert!(
             websites.contains(&X_WEBSITE),
@@ -601,11 +677,19 @@ mod tests {
         );
         assert!(
             websites.contains(&FACEBOOK_WEBSITE),
-            "Should contain All preset should contain Facebook"
+            "Case insensitive All preset should contain facebook"
         );
         assert!(
             websites.contains(&INSTAGRAM_WEBSITE),
-            "Should contain ALL preset should contain Instragram"
+            "Case insensitive All preset should contain instagram"
+        );
+        assert!(
+            websites.contains(&DISCORD_WEBSITE),
+            "Case insensitive All preset should contain discord"
+        );
+        assert!(
+            websites.contains(&WHATSAPP_WEBSITE),
+            "Case insensitive All preset should contain whatsapp"
         );
     }
     #[test]
