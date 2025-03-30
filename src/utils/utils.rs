@@ -17,6 +17,7 @@ const WHATSAPP_WEBSITE: &str = "www.web.whatsapp.com";
 const DISCORD_WEBSITE: &str = "www.discord.com";
 const ALL: &str = "all";
 const CODING: &str = "coding";
+const CODING_YT: &str = "coding_yt";
 const STUDYING: &str = "studying";
 const WHATSAPP: &str = "whatsapp";
 const DISCORD: &str = "discord";
@@ -30,7 +31,7 @@ const DISCORD: &str = "discord";
 ///
 /// A vector of strings containing the website URLs for the matched platforms.
 pub fn match_args(arguments: &Vec<String>) -> Vec<&str> {
-    let supported_preset: Vec<&str> = vec![ALL, STUDYING, CODING];
+    let supported_preset: Vec<&str> = vec![ALL, STUDYING, CODING, CODING_YT];
     let mut vec_arg_websites: Vec<&str> = Vec::new();
     for arg in arguments {
         if supported_preset.contains(&arg.to_lowercase().as_str()) {
@@ -102,6 +103,14 @@ fn add_website_based_on_preset(preset: &String) -> Vec<&str> {
             webs.push(INSTAGRAM_WEBSITE);
             webs.push(DISCORD_WEBSITE);
             webs.push(WHATSAPP_WEBSITE);
+        }
+        CODING_YT => {
+            webs.push(X_WEBSITE);
+            webs.push(FACEBOOK_WEBSITE);
+            webs.push(INSTAGRAM_WEBSITE);
+            webs.push(DISCORD_WEBSITE);
+            webs.push(WHATSAPP_WEBSITE);
+            webs.push(NETFLIX_WEBSITE);
         }
         STUDYING => {
             webs.push(YOUTUBE_WEBSITE);
@@ -467,6 +476,37 @@ mod tests {
     }
 
     #[test]
+    fn test_match_args_with_preset_coding_yt() {
+        let args = vec![CODING_YT.to_string()];
+        let result = match_args(&args);
+        assert_eq!(result.len(), 6, "Should return 6 website URLs");
+        assert!(
+            !result.contains(&YOUTUBE_WEBSITE),
+            "Should not contain YouTube website URL"
+        );
+        assert!(
+            result.contains(&NETFLIX_WEBSITE),
+            "Should contain Netflix website URL"
+        );
+        assert!(result.contains(&X_WEBSITE), "Should contain X website URL");
+        assert!(
+            result.contains(&FACEBOOK_WEBSITE),
+            "Should contain Facebook website URL"
+        );
+        assert!(
+            result.contains(&INSTAGRAM_WEBSITE),
+            "Should contain Instagram website URL"
+        );
+        assert!(
+            result.contains(&DISCORD_WEBSITE),
+            "Should contain discord website URL"
+        );
+        assert!(
+            result.contains(&WHATSAPP_WEBSITE),
+            "Should contain whatsapp website URL"
+        );
+    }
+    #[test]
     fn test_match_args_with_unknown_platform() {
         let args = vec!["unknown".to_string()];
         let result = match_args(&args);
@@ -611,6 +651,45 @@ mod tests {
         assert!(
             websites.contains(&WHATSAPP_WEBSITE),
             "Case insensitive CODING preset should contain whatsapp"
+        );
+    }
+    #[test]
+    fn test_add_website_based_on_preset_case_insensitive_coding_yt() {
+        let preset = "CoDiNg_yt".to_string();
+        let websites = add_website_based_on_preset(&preset);
+
+        assert_eq!(
+            websites.len(),
+            6,
+            "Case insensitive CODING_yt preset should return 6 websites"
+        );
+        assert!(
+            !websites.contains(&YOUTUBE_WEBSITE),
+            "Case insensitive CODING preset should not contain YouTube"
+        );
+        assert!(
+            websites.contains(&X_WEBSITE),
+            "Case insensitive CODING preset should contain X"
+        );
+        assert!(
+            websites.contains(&FACEBOOK_WEBSITE),
+            "Case insensitive CODING preset should contain facebook"
+        );
+        assert!(
+            websites.contains(&INSTAGRAM_WEBSITE),
+            "Case insensitive CODING preset should contain instagram"
+        );
+        assert!(
+            websites.contains(&DISCORD_WEBSITE),
+            "Case insensitive CODING preset should contain discord"
+        );
+        assert!(
+            websites.contains(&WHATSAPP_WEBSITE),
+            "Case insensitive CODING preset should contain whatsapp"
+        );
+        assert!(
+            websites.contains(&NETFLIX_WEBSITE),
+            "Case insensitive CODING preset should contain netflix"
         );
     }
     #[test]
