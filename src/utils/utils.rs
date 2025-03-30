@@ -2,12 +2,17 @@ use std::process::Command;
 
 use crate::FILE_PATH;
 
+// Args
 const YOUTUBE: &str = "youtube";
 const X: &str = "x";
 const NETFLIX: &str = "netflix";
 const FACEBOOK: &str = "facebook";
 const META: &str = "meta";
 const INSTAGRAM: &str = "instagram";
+const WHATSAPP: &str = "whatsapp";
+const DISCORD: &str = "discord";
+
+// Websites
 const YOUTUBE_WEBSITE: &str = "www.youtube.com";
 const NETFLIX_WEBSITE: &str = "www.netflix.com";
 const X_WEBSITE: &str = "www.x.com";
@@ -15,13 +20,13 @@ const FACEBOOK_WEBSITE: &str = "www.facebook.com";
 const INSTAGRAM_WEBSITE: &str = "www.instagram.com";
 const WHATSAPP_WEBSITE: &str = "www.web.whatsapp.com";
 const DISCORD_WEBSITE: &str = "www.discord.com";
+
+// Presets
 const ALL: &str = "all";
 const CODING: &str = "coding";
 const CODING_YT: &str = "coding_yt";
 const STUDYING: &str = "studying";
 const STUDYING_YT: &str = "studying_yt";
-const WHATSAPP: &str = "whatsapp";
-const DISCORD: &str = "discord";
 
 /// Matches command line arguments and converts them to corresponding website URLs.
 ///
@@ -37,6 +42,7 @@ pub fn match_args(arguments: &Vec<String>) -> Vec<&str> {
     for arg in arguments {
         if supported_preset.contains(&arg.to_lowercase().as_str()) {
             vec_arg_websites = add_website_based_on_preset(&arg);
+            println!("here: {:?}", vec_arg_websites);
         }
         match arg.to_lowercase().as_str() {
             YOUTUBE => vec_arg_websites.push(YOUTUBE_WEBSITE),
